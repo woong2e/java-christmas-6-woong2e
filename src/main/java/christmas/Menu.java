@@ -19,8 +19,8 @@ public enum Menu {
 
 
 
-    String meal;
-    int price;
+    private String meal;
+    private int price;
 
     Menu(String meal, int price){
         this.meal = meal;
