@@ -12,6 +12,7 @@ public class Customer {
         inputView.printHello();
         int date = inputView.readVisitDate();
         Map<Menu, Integer> orders = order.check(inputView.readMenu());
-        outputView.printEventBenefit(date, orders);
+        Receipt receipt = new Receipt(date, orders);
+        outputView.printEventBenefit(receipt);
     }
 }
