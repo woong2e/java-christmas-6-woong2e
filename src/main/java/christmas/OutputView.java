@@ -4,8 +4,8 @@ import java.util.Map;
 
 public class OutputView {
 
-    public void printEventBenefit(int date, Map<Menu, Integer> orders) {
-        printOrderMenu(orders);
+    public void printEventBenefit(Receipt receipt) {
+        printOrderMenu();
         printTotalOrderPrice();
         printGiftMenu();
         printBenefitList();
@@ -14,7 +14,7 @@ public class OutputView {
         printDecemberEventBadge();
     }
 
-    public void printOrderMenu(Map<Menu, Integer> orders) {
+    public void printOrderMenu() {
 
     }
 
