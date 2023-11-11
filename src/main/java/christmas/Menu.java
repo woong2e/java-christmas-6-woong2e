@@ -18,7 +18,9 @@ public enum Menu {
 
     DIET_COKE("drink", "제로콜라", 3_000),
     RED_WINE("drink", "레드와인",60_000),
-    CHAMPAGNE("drink", "샴페인", 25_000);
+    CHAMPAGNE("drink", "샴페인", 25_000),
+
+    NON("없음", "없음", 0);
 
 
     private String meal;
