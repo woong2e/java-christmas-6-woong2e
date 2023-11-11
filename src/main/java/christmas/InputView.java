@@ -81,53 +81,63 @@ public class InputView {
                 menuList.add(orderMenu.split("-")[0]);
                 amountList.add(Integer.parseInt(orderMenu.split("-")[1]));
                 if (containOnlyDrink(menuList)) {
-                    throw new IllegalArgumentException(INVALID_ORDER);
+                    throw new IllegalArgumentException(INVALID_ORDER+1);
                 }
             } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-                throw new IllegalArgumentException(INVALID_ORDER);
+                throw new IllegalArgumentException(INVALID_ORDER+2);
             }
         }
     }
 
     private boolean containOnlyDrink(List<String> menuList) {
         List<String> drinkMenuKoreanName = Menu.getDrinkMenuKoreanName();
+
+        int n = 0;
         for (String s : menuList) {
             if (drinkMenuKoreanName.contains(s)) {
-                continue;
+                n++;
             }
-            return false;
         }
-        return true;
+
+        if (n == menuList.size()) {
+            return true;
+        }
+        return false;
     }
 
     private Map<Menu, Integer> findMenu(List<String> menuList, List<Integer> amountList) {
-        Map<Menu, Integer> order = initOrder();
+        Map<Menu, Integer> order = new HashMap<>();
         for (int i = 0; i < menuList.size(); i++) {
-            order = putMenuAmount(menuList, amountList, i);
+            putMenuAmount(order,menuList, amountList, i);
         }
+
+        int sum = order.values().stream().mapToInt(Integer::intValue).sum();
+        if (sum > 20) {
+            throw new IllegalArgumentException(INVALID_ORDER+3);
+        }
+
         return order;
     }
 
-    private Map<Menu, Integer> putMenuAmount(List<String> menuList, List<Integer> amountList, int i) {
-        Map<Menu, Integer> order = initOrder();
+    private void putMenuAmount(Map<Menu, Integer> order,List<String> menuList, List<Integer> amountList, int i) {
+        boolean put = false;
         for (Menu menu : Menu.values()) {
             if(menu.getMenuKoreanName().equals(menuList.get(i)) && amountList.get(i) > 0) {
                 validateDuplication(order, menu);
                 order.put(menu, amountList.get(i));
-                continue;
+                put = true;
+                break;
             }
-            throw new IllegalArgumentException(INVALID_ORDER);
         }
-        int sum = order.values().stream().mapToInt(Integer::intValue).sum();
-        if (sum > 20) {
-            throw new IllegalArgumentException(INVALID_ORDER);
+        if (put) {
+            return;
         }
-        return order;
+        throw new IllegalArgumentException(INVALID_ORDER+4);
     }
 
     private void validateDuplication(Map<Menu, Integer> order,Menu menu) {
         if (order.containsKey(menu)) {
-            throw new IllegalArgumentException(INVALID_ORDER);
+            throw new IllegalArgumentException(INVALID_ORDER+5);
         }
     }
 
