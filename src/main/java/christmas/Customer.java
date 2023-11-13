@@ -6,13 +6,13 @@ public class Customer {
 
     public static void book() {
         InputView inputView = new InputView();
-        OutputView outputView = new OutputView();
-        Order order = new Order();
 
         inputView.printHello();
         int date = inputView.readVisitDate();
+        Order order = new Order();
         Map<Menu, Integer> orders = order.check(inputView.readMenu());
         Receipt receipt = new Receipt(date, orders);
-        outputView.printEventBenefit(receipt);
+        OutputView outputView = new OutputView(receipt);
+        outputView.printEventBenefit();
     }
 }
