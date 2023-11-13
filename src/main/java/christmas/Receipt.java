@@ -18,27 +18,17 @@ public class Receipt {
     public Receipt(int date, Map<Menu, Integer> orders) {
         this.date = date;
         this.orders = orders;
+        receiptPrinter();
     }
 
-    public Map<Menu, Integer> getOrders() {
-        return orders;
-    }
-
-    public int getTotalOrderPrice() {
+    public void receiptPrinter () {
         totalOrderPrice = orders.values().stream().mapToInt(Integer::intValue).sum();
-        return totalOrderPrice;
-    }
 
-    public Menu getGiftMenu() {
         if (totalOrderPrice >= 120_000) {
             giftMenu = Menu.CHAMPAGNE;
-            return giftMenu;
         }
         giftMenu = Menu.NON;
-        return giftMenu;
-    }
 
-    public Map<Event, Integer> getBenefitList() {
         if (Event.CHRISTMAS_D_DAY_DISCOUNT.getDate().contains(date)) {
             benefitList.put(Event.CHRISTMAS_D_DAY_DISCOUNT, 1);
         }
@@ -55,8 +45,18 @@ public class Receipt {
             benefitList.put(Event.PRESENTATION_EVENT, 1);
         }
 
+        for (Map.Entry<Event, Integer> benefit : benefitList.entrySet()) {
+            benefitSum += benefit.getKey().getBenefit() * benefit.getValue();
+        }
 
-        return benefitList;
+        totalOrderDiscountPrice = totalOrderPrice + benefitSum;
+
+        for (Event event : benefitList.keySet()) {
+            if (event.getDiscountKind().equals("증정 이벤트")) {
+                totalOrderDiscountPrice += event.getBenefit();
+                break;
+            }
+        }
     }
 
     private int findOrderNumber(String meal) {
@@ -69,23 +69,28 @@ public class Receipt {
         return number;
     }
 
+    public Map<Menu, Integer> getOrders() {
+        return orders;
+    }
+
+    public int getTotalOrderPrice() {
+        return totalOrderPrice;
+    }
+
+    public Menu getGiftMenu() {
+        return giftMenu;
+    }
+
+    public Map<Event, Integer> getBenefitList() {
+        return benefitList;
+    }
+
+
     public int getBenefitSum() {
-        for (Map.Entry<Event, Integer> benefit : benefitList.entrySet()) {
-            benefitSum += benefit.getKey().getBenefit() * benefit.getValue();
-        }
         return benefitSum;
     }
 
     public int getTotalOrderDiscountPrice() {
-        totalOrderDiscountPrice = totalOrderPrice + benefitSum;
-
-        for (Event event : benefitList.keySet()) {
-            if (event.getDiscountKind().equals("증정 이벤트")) {
-                totalOrderDiscountPrice += event.getBenefit();
-                break;
-            }
-        }
-
         return totalOrderDiscountPrice;
     }
 
