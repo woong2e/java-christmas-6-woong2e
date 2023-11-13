@@ -10,7 +10,7 @@ public class Receipt {
     private Map<Menu, Integer> orders;
     private int totalOrderPrice;
     private Menu giftMenu;
-    private Map<Event, Integer> benefitList = new HashMap<>();
+    private Map<Event, Integer> benefitList = null;
     private int benefitSum = 0;
     private int totalOrderDiscountPrice;
     private final List<String> decemberEventBadge = List.of("없음","별", "트리", "산타");
@@ -54,6 +54,11 @@ public class Receipt {
     }
 
     public Map<Event, Integer> getBenefitList() {
+        if (totalOrderPrice < 10_000) {
+            return benefitList;
+        }
+
+        benefitList = new HashMap<>();
         if (Event.CHRISTMAS_D_DAY_DISCOUNT.getDate().contains(date)) {
             benefitList.put(Event.CHRISTMAS_D_DAY_DISCOUNT, 1);
         }
@@ -74,6 +79,10 @@ public class Receipt {
 
 
     public int getBenefitSum() {
+        if (benefitList == null) {
+            benefitSum = 0;
+            return benefitSum;
+        }
         for (Map.Entry<Event, Integer> benefit : benefitList.entrySet()) {
             if (benefit.getKey().getDiscountKind().equals("크리스마스 디데이 할인")) {
                 benefitSum += benefit.getKey().getBenefit() - 100 * (date-1);
@@ -86,6 +95,9 @@ public class Receipt {
 
     public int getTotalOrderDiscountPrice() {
         totalOrderDiscountPrice = totalOrderPrice + benefitSum;
+        if (benefitList == null) {
+            return totalOrderDiscountPrice;
+        }
         for (Event event : benefitList.keySet()) {
             if (event.getDiscountKind().equals("증정 이벤트")) {
                 totalOrderDiscountPrice -= event.getBenefit();
