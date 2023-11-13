@@ -1,22 +1,27 @@
 package christmas;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Receipt {
-    int date;
-    Map<Menu, Integer> orders;
-    int totalOrderPrice;
-    Menu giftMenu;
-    Map<Event, Integer> benefitList;
-    int benefitSum;
-    int totalOrderDiscountPrice;
-    List<String> decemberEventBadge = List.of("별", "트리", "산타");
+    private int date;
+    private Map<Menu, Integer> orders;
+    private int totalOrderPrice;
+    private Menu giftMenu;
+    private Map<Event, Integer> benefitList = new HashMap<>();
+    private int benefitSum = 0;
+    private int totalOrderDiscountPrice;
+    private final List<String> decemberEventBadge = List.of("없음","별", "트리", "산타");
 
     public Receipt(int date, Map<Menu, Integer> orders) {
         this.date = date;
         this.orders = orders;
+    }
+
+    public Map<Menu, Integer> getOrders() {
+        return orders;
     }
 
     public int getTotalOrderPrice() {
@@ -34,7 +39,65 @@ public class Receipt {
     }
 
     public Map<Event, Integer> getBenefitList() {
+        if (Event.CHRISTMAS_D_DAY_DISCOUNT.getDate().contains(date)) {
+            benefitList.put(Event.CHRISTMAS_D_DAY_DISCOUNT, 1);
+        }
+        if (Event.WEEKDAY_DISCOUNT.getDate().contains(date)) {
+            benefitList.put(Event.WEEKDAY_DISCOUNT, findOrderNumber("dessert"));
+        }
+        if (Event.WEEKEND_DISCOUNT.getDate().contains(date)) {
+            benefitList.put(Event.WEEKEND_DISCOUNT, findOrderNumber("main"));
+        }
+        if (Event.SPECIAL_DISCOUNT.getDate().contains(date)) {
+            benefitList.put(Event.SPECIAL_DISCOUNT, 1);
+        }
+        if (giftMenu == Menu.CHAMPAGNE) {
+            benefitList.put(Event.PRESENTATION_EVENT, 1);
+        }
 
+
+        return benefitList;
+    }
+
+    private int findOrderNumber(String meal) {
+        int number = 0;
+        for(Map.Entry<Menu, Integer> order : orders.entrySet()) {
+            if (order.getKey().getMeal().equals(meal)) {
+                number++;
+            }
+        }
+        return number;
+    }
+
+    public int getBenefitSum() {
+        for (Map.Entry<Event, Integer> benefit : benefitList.entrySet()) {
+            benefitSum += benefit.getKey().getBenefit() * benefit.getValue();
+        }
+        return benefitSum;
+    }
+
+    public int getTotalOrderDiscountPrice() {
+        totalOrderDiscountPrice = totalOrderPrice + benefitSum;
+
+        for (Event event : benefitList.keySet()) {
+            if (event.getDiscountKind().equals("증정 이벤트")) {
+                totalOrderDiscountPrice += event.getBenefit();
+                break;
+            }
+        }
+
+        return totalOrderDiscountPrice;
+    }
+
+    public String getDecemberEventBadge() {
+        if (-benefitSum >= 20_000) {
+            return decemberEventBadge.get(3);
+        } else if (-benefitSum >= 10_000) {
+            return decemberEventBadge.get(2);
+        } else if (-benefitSum >= 5_000) {
+            return decemberEventBadge.get(1);
+        }
+        return decemberEventBadge.get(0);
     }
 
 }
