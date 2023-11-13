@@ -33,6 +33,10 @@ public enum Menu {
         this.price = price;
     }
 
+    public String getMeal() {
+        return meal;
+    }
+
     public String getMenuKoreanName() {
         return menuKoreanName;
     }
