@@ -7,17 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 public class Order {
-    private static final String INVALID_ORDER = "[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.";
 
     public Map<Menu, Integer> check(String input) {
-        Map<Menu, Integer> order;
-        while (true) {
-            try {
-                order = splitInput(input);
-                return order;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
+        try {
+            Map<Menu, Integer> order = splitInput(input);
+            return order;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
         }
     }
 
@@ -39,10 +35,10 @@ public class Order {
                 menuList.add(orderMenu.split("-")[0]);
                 amountList.add(Integer.parseInt(orderMenu.split("-")[1]));
                 if (containOnlyDrink(menuList)) {
-                    throw new IllegalArgumentException(INVALID_ORDER+1);
+                    throw new IllegalArgumentException();
                 }
             } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-                throw new IllegalArgumentException(INVALID_ORDER+2);
+                throw new IllegalArgumentException();
             }
         }
     }
@@ -71,7 +67,7 @@ public class Order {
 
         int sum = order.values().stream().mapToInt(Integer::intValue).sum();
         if (sum > 20) {
-            throw new IllegalArgumentException(INVALID_ORDER+3);
+            throw new IllegalArgumentException();
         }
 
         return order;
@@ -90,12 +86,12 @@ public class Order {
         if (put) {
             return;
         }
-        throw new IllegalArgumentException(INVALID_ORDER+4);
+        throw new IllegalArgumentException();
     }
 
     private void validateDuplication(Map<Menu, Integer> order,Menu menu) {
         if (order.containsKey(menu)) {
-            throw new IllegalArgumentException(INVALID_ORDER+5);
+            throw new IllegalArgumentException();
         }
     }
 }
