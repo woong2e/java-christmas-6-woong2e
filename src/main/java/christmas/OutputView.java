@@ -49,10 +49,14 @@ public class OutputView {
     public void printBenefitList() {
         System.out.println("<혜택 내역>");
         Map<Event, Integer> benefitList = receipt.getBenefitList();
+        if (benefitList == null) {
+            System.out.println("없음\n");
+            return;
+        }
+
         for (Map.Entry<Event, Integer> benefit : benefitList.entrySet()) {
             if (benefit.getKey().getDiscountKind().equals("크리스마스 디데이 할인")) {
-                System.out.printf("%s: %d원\n", benefit.getKey().getDiscountKind()
-                        , benefit.getKey().getBenefit() - 100 * (receipt.getDate()-1));
+                System.out.printf("%s: %d원\n", benefit.getKey().getDiscountKind(), benefit.getKey().getBenefit() - 100 * (receipt.getDate()-1));
                 continue;
             }
             System.out.printf("%s: %d원\n", benefit.getKey().getDiscountKind()
@@ -63,6 +67,10 @@ public class OutputView {
 
     public void printBenefitSum() {
         System.out.println("<총혜택 금액>");
+        if (receipt.getBenefitList() == null) {
+            System.out.println("0원\n");
+            return;
+        }
         System.out.println(receipt.getBenefitSum() + "원");
         System.out.println();
     }
