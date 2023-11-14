@@ -3,14 +3,12 @@ package christmas;
 import java.util.Map;
 
 public class Customer {
-
+    private static int date;
+    private static String menu;
+    private static Map<Menu, Integer> orders;
     public static void book() {
         InputView inputView = new InputView();
-
-        int date;
-        String menu;
         Order order = new Order();
-        Map<Menu, Integer> orders;
         while (true) {
             try {
                 date = inputView.readVisitDate();
