@@ -3,7 +3,7 @@ package christmas;
 import java.util.Map;
 
 public class OutputView {
-    private Receipt receipt;
+    private final Receipt receipt;
 
     OutputView(Receipt receipt) {
         this.receipt = receipt;
@@ -30,8 +30,7 @@ public class OutputView {
 
     public void printTotalOrderPrice() {
         System.out.println("<할인 전 총주문 금액>");
-        System.out.println(receipt.getTotalOrderPrice() + "원");
-        System.out.println();
+        System.out.println(receipt.getTotalOrderPrice() + "원\n");
     }
 
     public void printGiftMenu() {
@@ -71,14 +70,12 @@ public class OutputView {
             System.out.println("0원\n");
             return;
         }
-        System.out.println(receipt.getBenefitSum() + "원");
-        System.out.println();
+        System.out.println(receipt.getBenefitSum() + "원\n");
     }
 
     public void printTotalOrderDiscountPrice() {
         System.out.println("<할인 후 예상 결제 금액>");
-        System.out.println(receipt.getTotalOrderDiscountPrice() + "원");
-        System.out.println();
+        System.out.println(receipt.getTotalOrderDiscountPrice() + "원\n");
     }
 
     public void printDecemberEventBadge() {
