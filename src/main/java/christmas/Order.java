@@ -29,16 +29,14 @@ public class Order {
             try {
                 menuList.add(orderMenu.split("-")[0]);
                 amountList.add(Integer.parseInt(orderMenu.split("-")[1]));
-                if (containOnlyDrink(menuList)) {
-                    throw new IllegalArgumentException();
-                }
+                containOnlyDrink(menuList);
             } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
                 throw new IllegalArgumentException();
             }
         }
     }
 
-    private boolean containOnlyDrink(List<String> menuList) {
+    private void containOnlyDrink(List<String> menuList) {
         List<String> drinkMenuKoreanName = Menu.getDrinkMenuKoreanNameList();
 
         int n = 0;
@@ -48,7 +46,9 @@ public class Order {
             }
         }
 
-        return n == menuList.size();
+        if (n == menuList.size()) {
+            throw new IllegalArgumentException();
+        }
     }
 
     private Map<Menu, Integer> findMenu(List<String> menuList, List<Integer> amountList) {
