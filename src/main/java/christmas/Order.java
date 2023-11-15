@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Order {
-
     public Map<Menu, Integer> check(String input) {
         try {
             Map<Menu, Integer> order = splitInput(input);
@@ -19,11 +18,9 @@ public class Order {
 
     private Map<Menu, Integer> splitInput(String menu) {
         List<String> orderList = Arrays.asList(menu.split(","));
-
         List<String> menuList = new ArrayList<>();
         List<Integer> amountList = new ArrayList<>();
         validateNormalInput(orderList, menuList, amountList);
-
 
         Map<Menu, Integer> order = findMenu(menuList, amountList);
         return order;
@@ -53,16 +50,13 @@ public class Order {
             }
         }
 
-        if (n == menuList.size()) {
-            return true;
-        }
-        return false;
+        return n == menuList.size();
     }
 
     private Map<Menu, Integer> findMenu(List<String> menuList, List<Integer> amountList) {
         Map<Menu, Integer> order = new HashMap<>();
-        for (int i = 0; i < menuList.size(); i++) {
-            putMenuAmount(order,menuList, amountList, i);
+        for (int index = 0; index < menuList.size(); index++) {
+            putMenuAmount(order,menuList, amountList, index);
         }
 
         int sum = order.values().stream().mapToInt(Integer::intValue).sum();
@@ -73,12 +67,12 @@ public class Order {
         return order;
     }
 
-    private void putMenuAmount(Map<Menu, Integer> order,List<String> menuList, List<Integer> amountList, int i) {
+    private void putMenuAmount(Map<Menu, Integer> order,List<String> menuList, List<Integer> amountList, int index) {
         boolean put = false;
         for (Menu menu : Menu.values()) {
-            if(menu.getMenuKoreanName().equals(menuList.get(i)) && amountList.get(i) > 0) {
+            if(menu.getMenuKoreanName().equals(menuList.get(index)) && amountList.get(index) > 0) {
                 validateDuplication(order, menu);
-                order.put(menu, amountList.get(i));
+                order.put(menu, amountList.get(index));
                 put = true;
                 break;
             }
