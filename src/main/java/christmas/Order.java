@@ -9,8 +9,7 @@ import java.util.Map;
 public class Order {
     public Map<Menu, Integer> check(String input) {
         try {
-            Map<Menu, Integer> order = splitInput(input);
-            return order;
+            return splitInput(input);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
         }
@@ -22,8 +21,7 @@ public class Order {
         List<Integer> amountList = new ArrayList<>();
         validateNormalInput(orderList, menuList, amountList);
 
-        Map<Menu, Integer> order = findMenu(menuList, amountList);
-        return order;
+        return findMenu(menuList, amountList);
     }
 
     private void validateNormalInput(List<String> orderList, List<String> menuList, List<Integer> amountList) {
