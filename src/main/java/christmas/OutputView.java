@@ -21,8 +21,7 @@ public class OutputView {
 
     public void printOrderMenu() {
         System.out.println("<주문 메뉴>");
-        Map<Menu, Integer> orders = receipt.getOrders();
-        for (Map.Entry<Menu, Integer> order : orders.entrySet()) {
+        for (Map.Entry<Menu, Integer> order : receipt.getOrders().entrySet()) {
             System.out.printf("%s %d개\n",order.getKey().getMenuKoreanName(), order.getValue());
         }
         System.out.println();
@@ -35,9 +34,8 @@ public class OutputView {
 
     public void printGiftMenu() {
         System.out.println("<증정 메뉴>");
-        Menu giftMenu = receipt.getGiftMenu();
-        System.out.print(giftMenu.getMenuKoreanName());
-        if (giftMenu.getMenuKoreanName().equals("샴페인")) {
+        System.out.print(receipt.getGiftMenu().getMenuKoreanName());
+        if (receipt.getGiftMenu().getMenuKoreanName().equals("샴페인")) {
             System.out.println(" 1개\n");
             return;
         }
@@ -47,13 +45,12 @@ public class OutputView {
 
     public void printBenefitList() {
         System.out.println("<혜택 내역>");
-        Map<Event, Integer> benefitList = receipt.getBenefitList();
-        if (benefitList == null) {
+        if (receipt.getBenefitList() == null) {
             System.out.println("없음\n");
             return;
         }
 
-        for (Map.Entry<Event, Integer> benefit : benefitList.entrySet()) {
+        for (Map.Entry<Event, Integer> benefit : receipt.getBenefitList().entrySet()) {
             if (benefit.getKey().getDiscountKind().equals("크리스마스 디데이 할인")) {
                 System.out.printf("%s: %d원\n", benefit.getKey().getDiscountKind(), benefit.getKey().getBenefit() - 100 * (receipt.getDate()-1));
                 continue;
