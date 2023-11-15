@@ -23,9 +23,9 @@ public enum Menu {
     NON("없음", "없음", 0);
 
 
-    private String meal;
-    private String menuKoreanName;
-    private int price;
+    private final String meal;
+    private final String menuKoreanName;
+    private final int price;
 
     Menu(String meal, String menuKoreanName, int price){
         this.meal = meal;
@@ -45,7 +45,7 @@ public enum Menu {
         return price;
     }
 
-    public static List<String> getDrinkMenuKoreanName(){
+    public static List<String> getDrinkMenuKoreanNameList(){
         List<String> drinkMenuKoreanName = new ArrayList<>();
         for (Menu menu : Menu.values()) {
             if (menu.meal.equals("drink")) {
