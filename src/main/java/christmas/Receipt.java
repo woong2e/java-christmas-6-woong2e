@@ -1,13 +1,12 @@
 package christmas;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Receipt {
-    private int date;
-    private Map<Menu, Integer> orders;
+    private final int date;
+    private final Map<Menu, Integer> orders;
     private int totalOrderPrice;
     private Menu giftMenu;
     private Map<Event, Integer> benefitList = null;
@@ -18,16 +17,6 @@ public class Receipt {
     public Receipt(int date, Map<Menu, Integer> orders) {
         this.date = date;
         this.orders = orders;
-    }
-
-    private int findOrderNumber(String meal) {
-        int number = 0;
-        for(Map.Entry<Menu, Integer> order : orders.entrySet()) {
-            if (order.getKey().getMeal().equals(meal)) {
-                number += order.getValue();
-            }
-        }
-        return number;
     }
 
     public int getDate() {
@@ -57,24 +46,36 @@ public class Receipt {
         if (totalOrderPrice < 10_000) {
             return benefitList;
         }
+        putBenefitList();
+        return benefitList;
+    }
 
+    private void putBenefitList() {
         benefitList = new HashMap<>();
-        if (Event.CHRISTMAS_D_DAY_DISCOUNT.getDate().contains(date)) {
-            benefitList.put(Event.CHRISTMAS_D_DAY_DISCOUNT, 1);
-        }
-        if (Event.WEEKDAY_DISCOUNT.getDate().contains(date)) {
-            benefitList.put(Event.WEEKDAY_DISCOUNT, findOrderNumber("dessert"));
-        }
-        if (Event.WEEKEND_DISCOUNT.getDate().contains(date)) {
-            benefitList.put(Event.WEEKEND_DISCOUNT, findOrderNumber("main"));
-        }
-        if (Event.SPECIAL_DISCOUNT.getDate().contains(date)) {
-            benefitList.put(Event.SPECIAL_DISCOUNT, 1);
+        int[] orderNum = new int[]{1,findOrderNumber("dessert"),findOrderNumber("main"), 1};
+        int i = 0;
+        for (Event event : Event.values()) {
+            if (event == Event.PRESENTATION_EVENT) {
+                continue;
+            }
+            if (event.getDate().contains(date)) {
+                benefitList.put(event, orderNum[i]);
+            }
+            i++;
         }
         if (giftMenu == Menu.CHAMPAGNE) {
             benefitList.put(Event.PRESENTATION_EVENT, 1);
         }
-        return benefitList;
+    }
+
+    private int findOrderNumber(String meal) {
+        int number = 0;
+        for(Map.Entry<Menu, Integer> order : orders.entrySet()) {
+            if (order.getKey().getMeal().equals(meal)) {
+                number += order.getValue();
+            }
+        }
+        return number;
     }
 
 
