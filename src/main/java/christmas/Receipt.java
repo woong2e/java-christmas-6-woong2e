@@ -7,47 +7,49 @@ import java.util.Map;
 public class Receipt {
     private final int date;
     private final Map<Menu, Integer> orders;
+
     private int totalOrderPrice;
     private Menu giftMenu;
     private Map<Event, Integer> benefitList = null;
     private int benefitSum = 0;
     private int totalOrderDiscountPrice;
-    private final List<String> decemberEventBadge = List.of("없음","별", "트리", "산타");
+    private final List<String> eventBadges = List.of("없음","별", "트리", "산타");
+    private String decemberEventBadge;
 
     public Receipt(int date, Map<Menu, Integer> orders) {
         this.date = date;
         this.orders = orders;
+        findFields();
     }
 
-    public int getDate() {
-        return date;
-    }
-    public Map<Menu, Integer> getOrders() {
-        return orders;
+    private void findFields() {
+        findTotalOrderPrice();
+        findGiftMenu();
+        findBenefitList();
+        findBenefitSum();
+        findTotalOrderDiscountPrice();
+        findDecemberEventBadge();
     }
 
-    public int getTotalOrderPrice() {
+    private void findTotalOrderPrice() {
         for(Map.Entry<Menu, Integer> order : orders.entrySet()) {
             totalOrderPrice += order.getKey().getPrice() * order.getValue();
         }
-        return totalOrderPrice;
     }
 
-    public Menu getGiftMenu() {
+    private void findGiftMenu() {
         if (totalOrderPrice >= 120_000) {
             giftMenu = Menu.CHAMPAGNE;
-            return giftMenu;
+            return;
         }
         giftMenu = Menu.NON;
-        return giftMenu;
     }
 
-    public Map<Event, Integer> getBenefitList() {
+    private void findBenefitList() {
         if (totalOrderPrice < 10_000) {
-            return benefitList;
+            return;
         }
         putBenefitList();
-        return benefitList;
     }
 
     private void putBenefitList() {
@@ -78,11 +80,10 @@ public class Receipt {
         return number;
     }
 
-
-    public int getBenefitSum() {
+    private void findBenefitSum() {
         if (benefitList == null) {
             benefitSum = 0;
-            return benefitSum;
+            return;
         }
         for (Map.Entry<Event, Integer> benefit : benefitList.entrySet()) {
             if (benefit.getKey().getDiscountKind().equals("크리스마스 디데이 할인")) {
@@ -91,13 +92,12 @@ public class Receipt {
             }
             benefitSum += benefit.getKey().getBenefit() * benefit.getValue();
         }
-        return benefitSum;
     }
 
-    public int getTotalOrderDiscountPrice() {
+    private void findTotalOrderDiscountPrice() {
         totalOrderDiscountPrice = totalOrderPrice + benefitSum;
         if (benefitList == null) {
-            return totalOrderDiscountPrice;
+            return;
         }
         for (Event event : benefitList.keySet()) {
             if (event.getDiscountKind().equals("증정 이벤트")) {
@@ -105,18 +105,51 @@ public class Receipt {
                 break;
             }
         }
+    }
+
+    private void findDecemberEventBadge() {
+        if (-benefitSum >= 20_000) {
+            decemberEventBadge = eventBadges.get(3);
+            return;
+        } else if (-benefitSum >= 10_000) {
+            decemberEventBadge = eventBadges.get(2);
+            return;
+        } else if (-benefitSum >= 5_000) {
+            decemberEventBadge = eventBadges.get(1);
+            return;
+        }
+        decemberEventBadge = eventBadges.get(0);
+    }
+
+    public int getDate() {
+        return date;
+    }
+    public Map<Menu, Integer> getOrders() {
+        return orders;
+    }
+
+    public int getTotalOrderPrice() {
+        return totalOrderPrice;
+    }
+
+    public Menu getGiftMenu() {
+        return giftMenu;
+    }
+
+
+    public Map<Event, Integer> getBenefitList() {
+        return benefitList;
+    }
+
+    public int getBenefitSum() {
+        return benefitSum;
+    }
+
+    public int getTotalOrderDiscountPrice() {
         return totalOrderDiscountPrice;
     }
 
     public String getDecemberEventBadge() {
-        if (-benefitSum >= 20_000) {
-            return decemberEventBadge.get(3);
-        } else if (-benefitSum >= 10_000) {
-            return decemberEventBadge.get(2);
-        } else if (-benefitSum >= 5_000) {
-            return decemberEventBadge.get(1);
-        }
-        return decemberEventBadge.get(0);
+        return decemberEventBadge;
     }
-
 }
