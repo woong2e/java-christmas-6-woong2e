@@ -29,11 +29,11 @@ public class Order {
             try {
                 menuList.add(orderMenu.split("-")[0]);
                 amountList.add(Integer.parseInt(orderMenu.split("-")[1]));
-                containOnlyDrink(menuList);
             } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
                 throw new IllegalArgumentException();
             }
         }
+        containOnlyDrink(menuList);
     }
 
     private void containOnlyDrink(List<String> menuList) {
