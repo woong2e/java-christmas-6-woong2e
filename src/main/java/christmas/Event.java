@@ -37,10 +37,10 @@ public enum Event {
             26, 27, 28, 29, 30,
             31), "drink", -25_000);
 
-    private String discountKind;
-    private List<Integer> date;
-    private String item;
-    private int benefit;
+    private final String discountKind;
+    private final List<Integer> date;
+    private final String item;
+    private final int benefit;
 
     Event(String discountKind, List<Integer> date, String item, int benefit) {
         this.discountKind = discountKind;
@@ -56,12 +56,12 @@ public enum Event {
     public List<Integer> getDate() {
         return date;
     }
-    public String getItem() {
-        return item;
-    }
 
     public int getBenefit() {
         return benefit;
     }
 
+    public String getItem() {
+        return item;
+    }
 }
