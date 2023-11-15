@@ -41,7 +41,7 @@ public class Order {
     }
 
     private boolean containOnlyDrink(List<String> menuList) {
-        List<String> drinkMenuKoreanName = Menu.getDrinkMenuKoreanName();
+        List<String> drinkMenuKoreanName = Menu.getDrinkMenuKoreanNameList();
 
         int n = 0;
         for (String s : menuList) {
